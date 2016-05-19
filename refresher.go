@@ -30,7 +30,7 @@ type refresher struct {
 const (
 	defaultRefreshPercentageThreshold = 0.6
 	defaultWarningPercentageThreshold = 0.8
-	retryDelay = 10 * time.Second
+	retryDelay                        = 10 * time.Second
 )
 
 var (

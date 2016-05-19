@@ -35,7 +35,7 @@ func TestCaching(t *testing.T) {
 func TestPanic(t *testing.T) {
 	defer func() {
 		r := recover()
-		err,ok := r.(error)
+		err, ok := r.(error)
 		if !ok {
 			t.Error("Panic didn't contain an error")
 		}
