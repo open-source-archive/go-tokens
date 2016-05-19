@@ -1,6 +1,6 @@
-=====================
-Golang Tokens Library
-=====================
+=================
+Go Tokens Library
+=================
 
 .. image:: https://travis-ci.org/zalando/go-tokens.svg?branch=master
     :target: https://travis-ci.org/zalando/go-tokens
@@ -10,7 +10,10 @@ Golang Tokens Library
 
 .. image:: https://goreportcard.com/badge/github.com/zalando/go-tokens
     :target: https://goreportcard.com/report/github.com/zalando/go-tokens
-    
+
+.. image:: https://godoc.org/github.com/zalando/go-tokens?status.svg
+    :target: https://godoc.org/github.com/zalando/go-tokens
+
 This is a library very similar to `tokens`_ and `python-tokens`_.
 
 In a nutshell, you provide the OAuth2 token endpoint and which tokens and scopes to have managed.
