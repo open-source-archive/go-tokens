@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"strings"
 	"time"
+	"github.com/zalando/go-tokens/httpclient"
 )
 
 type refresher struct {
@@ -34,7 +35,7 @@ const (
 
 func newRefresher(url string, ucp user.CredentialsProvider, ccp client.CredentialsProvider, h *holder) *refresher {
 	r := &refresher{
-		httpClient: DefaultHTTPClient(),
+		httpClient: httpclient.Default(),
 		url:        url,
 		userCredentialsProvider:   ucp,
 		clientCredentialsProvider: ccp,
