@@ -2,22 +2,27 @@ package tokens
 
 import (
 	"fmt"
-	"log"
 	"time"
 )
 
-type refreshCallback func(r ManagementRequest)
+type (
+	scheduler struct {
+		req      chan *refreshRequest
+		quit     chan struct{}
+		callback refreshCallback
+	}
 
-type scheduler struct {
-	req      chan *refreshRequest
-	quit     chan struct{}
-	callback refreshCallback
-}
+	refreshRequest struct {
+		mgmtReq ManagementRequest
+		when    time.Duration
+		err     chan error
+	}
 
-type refreshRequest struct {
-	tokenRequest ManagementRequest
-	when         time.Duration
-}
+	refreshCallback func(r ManagementRequest)
+	scheduleFunc    func(d time.Duration, f func()) *time.Timer
+)
+
+var runner = time.AfterFunc
 
 func NewScheduler(callback refreshCallback) *scheduler {
 	req := make(chan *refreshRequest)
@@ -29,14 +34,17 @@ func NewScheduler(callback refreshCallback) *scheduler {
 		for {
 			select {
 			case r := <-req:
-				if _, has := m[r.tokenRequest.id]; has {
-					log.Printf("Refresh of token %q was already scheduled. Skipping\n", r.tokenRequest.id)
+				if _, has := m[r.mgmtReq.id]; has {
+					r.err <- fmt.Errorf("Refresh of token %q was already scheduled. Skipping\n", r.mgmtReq.id)
 				} else {
-					time.AfterFunc(r.when, func() {
-						s.callback(r.tokenRequest)
-						// delete(m, r.tokenRequest.id)
+					m[r.mgmtReq.id] = runner(r.when, func() {
+						s.callback(r.mgmtReq)
+						delete(m, r.mgmtReq.id)
 					})
+					r.err <- nil
 				}
+			case <-quit:
+				return
 			}
 		}
 	}()
@@ -44,8 +52,12 @@ func NewScheduler(callback refreshCallback) *scheduler {
 	return s
 }
 
-func (s *scheduler) scheduleTokenRefresh(tr ManagementRequest, d time.Duration) {
-	fmt.Printf("Scheduling refresh of token %q ...\n", tr.id)
-	s.req <- &refreshRequest{tokenRequest: tr, when: d}
-	fmt.Printf("Refresh of token %q scheduled in %v ...\n", tr.id, d)
+func (s *scheduler) scheduleTokenRefresh(mr ManagementRequest, d time.Duration) error {
+	e := make(chan error)
+	s.req <- &refreshRequest{mgmtReq: mr, when: d, err: e}
+	return <-e
+}
+
+func (s *scheduler) Stop() {
+	close(s.quit)
 }
