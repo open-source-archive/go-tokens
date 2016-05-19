@@ -38,11 +38,11 @@ func TestRefresher(t *testing.T) {
 	}
 
 	if at.Token != "header.claims.sig" {
-		t.Error(`Invalid token. Wanted "header.claims.sig", got %q`, at.Token)
+		t.Errorf(`Invalid token. Wanted "header.claims.sig", got %q` + "\n", at.Token)
 	}
 
 	if at.ExpiresIn != 4 {
-		t.Error(`Invalid expiration time. Wanted 4, got %d`, at.ExpiresIn)
+		t.Errorf(`Invalid expiration time. Wanted 4, got %d` + "\n", at.ExpiresIn)
 	}
 }
 
