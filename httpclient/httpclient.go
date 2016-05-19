@@ -17,14 +17,14 @@ var (
 	UserAgent = "go-tokens"
 )
 
-// DefaultHTTPClient returns a new http.Client with KeepAlive disabled. That means no connection pooling.
+// Default returns a new http.Client with KeepAlive disabled. That means no connection pooling.
 // Use it only for one time requests where performance is not a concern
 // It use some settings from the options package: options.HttpClientTimeout and options.HttpClientTlsTimeout
 func Default() *http.Client {
 	return New(defaultHTTPClientTimeout, defaultHTTPClientTLSTimeout)
 }
 
-// NewHTTPClient returns a new http.Client with specific timeouts from its arguments. KeepAlive is disabled.
+// New returns a new http.Client with specific timeouts from its arguments. KeepAlive is disabled.
 // That means no connection pooling. Use it only for one time requests where performance is not a concern
 func New(timeout time.Duration, tlsTimeout time.Duration) *http.Client {
 	return &http.Client{

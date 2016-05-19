@@ -5,13 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/zalando/go-tokens/client"
+	"github.com/zalando/go-tokens/httpclient"
 	"github.com/zalando/go-tokens/user"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
-	"github.com/zalando/go-tokens/httpclient"
 )
 
 type refresher struct {
