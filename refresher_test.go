@@ -19,8 +19,8 @@ func TestRefresher(t *testing.T) {
 	defer server.Close()
 
 	url := fmt.Sprintf("http://%s", server.Listener.Addr())
-	th := NewHolder()
-	r := NewRefresher(
+	th := newHolder()
+	r := newRefresher(
 		url,
 		user.NewJSONFileUserCredentialsProvider("testdata/user.json"),
 		client.NewJSONFileClientCredentialsProvider("testdata/client.json"),
@@ -55,7 +55,7 @@ func TestRefresherFailure(t *testing.T) {
 	defer server.Close()
 
 	url := fmt.Sprintf("http://%s", server.Listener.Addr())
-	th := NewHolder()
+	th := newHolder()
 	for _, test := range []struct {
 		u   string
 		ucp user.CredentialsProvider
@@ -82,7 +82,7 @@ func TestRefresherFailure(t *testing.T) {
 			ccp: client.NewJSONFileClientCredentialsProvider("testdata/client.json"),
 		},
 	} {
-		r := NewRefresher(test.u, test.ucp, test.ccp, th)
+		r := newRefresher(test.u, test.ucp, test.ccp, th)
 
 		err := r.refreshTokens([]ManagementRequest{NewPasswordRequest("test", "uid", "team")})
 		if err == nil {
