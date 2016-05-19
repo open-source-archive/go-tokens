@@ -3,44 +3,45 @@ Package tokens implements a thread safe token manager. Your application starts b
 manager with requests for management of named tokens. Those tokens can later be obtained using
 their ID. The manager will refresh the tokens in the background when needed.
 
-	Usage:
-	Create a new token manager with the Manage() function
-		tokenManager := Manage("http://oauth-endpoint", mgmtRequests)
+Usage:
 
-	This creates a new tokenManager which will obtain OAuth tokens from the http://oauth-endpoint
+Create a new token manager with the Manage() function
 
-	You can set some options for the manager with the extra variadic argument, or later, after
-	getting the tokenManager instance. The available options are:
+	tokenManager := Manage("http://oauth-endpoint", mgmtRequests)
 
-		RefreshPercentageThreshold(float64)
-		WarningPercentageThreshold(float64)
+This creates a new tokenManager which will obtain OAuth tokens from the http://oauth-endpoint
 
-	The warning threshold should be higher than the refresh threshold
+You can set some options for the manager with the extra variadic argument, or later, after
+getting the tokenManager instance. The available options are:
 
-	They can be used immediately when the token manager is created
+	RefreshPercentageThreshold(float64)
+	WarningPercentageThreshold(float64)
 
-		tokenManager := Manage(
-			"http://oauth-endpoint",
-			mgmtRequests,
-			RefreshPercentageThreshold(0.90),
-			WarningPercentageThreshold(0.95),
-		)
+The warning threshold should be higher than the refresh threshold
 
-	Or they can also be used at a later stage. The refresh threshold  will only affect the next scheduling
-	while the warning threshold takes effect immediately. Usually you don't need to change any of them at
-	runtime.
+They can be used immediately when the token manager is created
 
-	You application should only need to get the named tokens for whichever purpose, usually, to access
-	OAuth2 protected endpoints using the tokens in the Authorization header.
+	tokenManager := Manage(
+		"http://oauth-endpoint",
+		mgmtRequests,
+		RefreshPercentageThreshold(0.90),
+		WarningPercentageThreshold(0.95),
+	)
 
-	The Get() function returns the AccessToken with a specific name (from the ManagementRequest)
+Or they can also be used at a later stage. The refresh threshold  will only affect the next scheduling
+while the warning threshold takes effect immediately. Usually you don't need to change any of them at
+runtime.
 
-	The call can fail with 2 specific errors:
+You application should only need to get the named tokens for whichever purpose, usually, to access
+OAuth2 protected endpoints using the tokens in the Authorization header.
 
-		ErrTokenNotAvailable
-		ErrTokenExpired
+The Get() function returns the AccessToken with a specific name (from the ManagementRequest)
 
-	Which are self explanatory
+The call can fail with 2 specific errors:
 
+	ErrTokenNotAvailable
+	ErrTokenExpired
+
+Which are self explanatory
 */
 package tokens

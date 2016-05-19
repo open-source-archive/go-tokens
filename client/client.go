@@ -1,3 +1,6 @@
+/*
+Package user holds the interfaces for the Client credentials
+*/
 package client
 
 // Credentials is the interface for any type that is able to return an id and a secret
