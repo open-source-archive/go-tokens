@@ -17,11 +17,12 @@ In a nutshell, you provide the OAuth2 token endpoint and which tokens and scopes
  
 The library will make sure that the managed tokens are always valid by refreshing them before they expire.
 
-## Users Guide
+Users Guide
+===========
 
 The library will fetch credentials from JSON files (client.json and user.json) from the folder defined in the `CREDENTIALS_DIR` environment variable.
 
-The threshold for refresh is around 60% of the expiration time.
+The default threshold for refresh is around 60% of the expiration time.
 
 Example
 =======
