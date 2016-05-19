@@ -1,8 +1,7 @@
-package main
+package tokens
 
 import (
 	"fmt"
-	"github.com/zalando/go-tokens/tokens"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -12,7 +11,7 @@ import (
 )
 
 func ExampleTokens() {
-	os.Setenv("CREDENTIALS_DIR", "tokens/testdata")
+	os.Setenv("CREDENTIALS_DIR", "testdata")
 	handler := func(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(http.StatusOK)
 		buf, _ := ioutil.ReadAll(req.Body)
@@ -30,9 +29,9 @@ func ExampleTokens() {
 	defer server.Close()
 
 	url := fmt.Sprintf("http://%s", server.Listener.Addr())
-	tokens, err := tokens.Manage(url, []tokens.ManagementRequest{
-		tokens.NewPasswordRequest("test1", "foo.read"),
-		tokens.NewPasswordRequest("test2", "foo.write"),
+	tokens, err := Manage(url, []ManagementRequest{
+		NewPasswordRequest("test1", "foo.read"),
+		NewPasswordRequest("test2", "foo.write"),
 	})
 	if err != nil {
 		log.Fatal(err)
