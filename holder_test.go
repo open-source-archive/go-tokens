@@ -5,7 +5,7 @@ import (
 )
 
 func TestCaching(t *testing.T) {
-	holder := NewHolder()
+	holder := newHolder()
 	foo := &AccessToken{Token: "foo", ExpiresIn: 42}
 	bar := &AccessToken{Token: "bar", ExpiresIn: 0}
 

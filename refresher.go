@@ -3,7 +3,6 @@ package tokens
 import (
 	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/zalando/go-tokens/client"
 	"github.com/zalando/go-tokens/user"
@@ -33,11 +32,7 @@ const (
 	retryDelay                        = 10 * time.Second
 )
 
-var (
-	ErrGettingToken = errors.New("error getting token from token endpoint")
-)
-
-func NewRefresher(url string, ucp user.CredentialsProvider, ccp client.CredentialsProvider, h *holder) *refresher {
+func newRefresher(url string, ucp user.CredentialsProvider, ccp client.CredentialsProvider, h *holder) *refresher {
 	r := &refresher{
 		httpClient: DefaultHTTPClient(),
 		url:        url,
@@ -49,7 +44,7 @@ func NewRefresher(url string, ucp user.CredentialsProvider, ccp client.Credentia
 
 		tokenHolder: h,
 	}
-	r.refreshScheduler = NewScheduler(r.refreshToken)
+	r.refreshScheduler = newScheduler(r.refreshToken)
 	return r
 }
 
@@ -97,7 +92,7 @@ func (r *refresher) doRefreshToken(tr ManagementRequest) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode < http.StatusOK && resp.StatusCode >= http.StatusMultipleChoices {
-		return ErrGettingToken
+		return fmt.Errorf("Error getting token: %d - %v", resp.StatusCode, resp.Body)
 	}
 
 	buf, err := ioutil.ReadAll(resp.Body)
