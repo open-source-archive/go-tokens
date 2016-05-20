@@ -83,11 +83,11 @@ func TestOptions(t *testing.T) {
 	}
 
 	if err = RefreshPercentageThreshold(0.0)(manager); err == nil {
-		t.Error("Expected an error setting a 0% refresh threshold")
+		t.Error("Expected an error setting a 0 percent refresh threshold")
 	}
 
 	if err = RefreshPercentageThreshold(1.0)(manager); err == nil {
-		t.Error("Expected an error setting a refresh threshold higher or equal to 100%")
+		t.Error("Expected an error setting a refresh threshold higher or equal to 100 percent")
 	}
 
 	if err = RefreshPercentageThreshold(0.8)(manager); err == nil {
