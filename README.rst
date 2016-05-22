@@ -37,8 +37,8 @@ Example
 
 	// You can manage multiple tokens with different scopes
 	reqs := []tokens.ManagementRequest{
-		tokens.NewRequest("test1", "password", "foo.read"),
-		tokens.NewRequest("test2", "password", "bar.write"),
+		tokens.NewPasswordRequest("test1", "foo.read"),
+		tokens.NewPasswordRequest("test2", "user.email", "user.name"),
 	}
 
 	// Manager creation tries to obtain all tokens synchronously initially
