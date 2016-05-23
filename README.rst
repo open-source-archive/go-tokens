@@ -1,4 +1,3 @@
-=================
 Go Tokens Library
 =================
 
@@ -18,18 +17,40 @@ This is a library very similar to `tokens`_ and `python-tokens`_.
 
 In a nutshell, you provide the OAuth2 token endpoint and which tokens and scopes to have managed.
  
-The library will make sure that the managed tokens are always valid by refreshing them before they expire.
-
-Users Guide
-===========
-
-The library will fetch credentials from JSON files (client.json and user.json) from the folder defined in
-the ``CREDENTIALS_DIR`` environment variable.
+The library can use any custom credentials provider and it will make sure that the managed tokens are always
+valid by refreshing them before they expire.
 
 The default threshold for refresh is around 60% of the expiration time.
 
-Example
-=======
+Credentials Provider
+--------------------
+
+The library currently contains implementations of the ``user.CredentialsProvider`` and the ``client.CredentialsProvider``
+that you can use out of the box. they both fetch credentials from JSON files (user.json and client.json, respectively)
+from a folder defined in the ``CREDENTIALS_DIR`` environment variable.
+
+You can easily use your own credential providers.
+
+User Credentials
+~~~~~~~~~~~~~~~~
+
+User credentials are, very simply, a username and a password. Any type that implements the ``user.Credentials`` should
+be able to provide them. The ``user.CredentialsProvider`` is the interface to implement for any custom type that is
+able to provide ``user.Credentials``.
+
+For a simple example, check the ``user/noop.go`` file.
+
+Client Credentials
+~~~~~~~~~~~~~~~~~~
+
+Client credentials are very similar to the user credentials. It consists of a client ID and client secret. Any type
+that implements the ``client.Credentials`` should be able to provide them. The ``client.CredentialsProvider`` is the
+interface to implement for any custom type that is able to provide ``client.Credentials``.
+
+For a simple example, check the ``client/noop.go`` file.
+
+Users Guide
+-----------
 
 .. code-block:: go
 
@@ -56,6 +77,11 @@ Example
 			// Do something with accessToken
 		}
 	}
+
+Manager Options
+~~~~~~~~~~~~~~~
+
+You can customize the behavior of the Manager with the following options:
 
 .. _tokens: https://github.com/zalando-stups/tokens
 .. _python-tokens: https://github.com/zalando-stups/python-tokens
