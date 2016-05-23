@@ -10,7 +10,9 @@ type jsonFileClientCredentialsProvider struct {
 }
 
 // NewJSONFileClientCredentialsProvider returns a client.CredentialsProvider that reads both client id and
-// secret from a JSON file stored in the filesystem
+// secret from a JSON file stored in the specified filesystem path
+// The contents of such file should follow the following specifications:
+//		{"client_id":"foo","client_secret":"bar"}
 func NewJSONFileClientCredentialsProvider(path string) CredentialsProvider {
 	return &jsonFileClientCredentialsProvider{path}
 }

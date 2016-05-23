@@ -13,7 +13,7 @@ var (
 	ErrInvalidWarningThreshold = errors.New("Invalid warning threshold")
 
 	// ErrInvalidUserCredentialsProvider is returned if there is an attempt to set a nil credentials provider
-	ErrInvalidUserCredentialsProvider   = errors.New("Invalid user credentials provider")
+	ErrInvalidUserCredentialsProvider = errors.New("Invalid user credentials provider")
 	// ErrInvalidClientCredentialsProvider is returned if there is an attempt to set a nil credentials provider
 	ErrInvalidClientCredentialsProvider = errors.New("Invalid client credentials provider")
 )

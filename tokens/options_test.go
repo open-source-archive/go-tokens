@@ -1,10 +1,10 @@
 package tokens
 
 import (
+	"github.com/zalando/go-tokens/client"
+	"github.com/zalando/go-tokens/user"
 	"net/http"
 	"testing"
-	"github.com/zalando/go-tokens/user"
-	"github.com/zalando/go-tokens/client"
 )
 
 func TestOptions(t *testing.T) {
