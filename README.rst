@@ -84,10 +84,19 @@ Manager Options
 
 You can customize the behavior of the Manager with the following options:
     
-    RefreshPercentageThreshold(float64) accepts any float between 0 and 1 (exclusive) which defines the percentage of token validity when to schedule background refreshing
-    WarningPercentageThreshold(float64) accepts any float between 0 (exclusive) and 1 (inclusive) which defines when the library starts logging warnings that tokens will, eventually expire. This can happen if, for example, the background refresh is failing. It should be higher than the refresh threshold.
-    UserCredentialsProvider(user.CredentialsProvider) accepts any user.CredentialsProvider instance that will provide user credentials for the password grant type
-    ClientCredentialsProvider(client.CredentialsProvider) accepts any client.CredentialsProvider instance that will provide client credentials for the OAuth calls
+RefreshPercentageThreshold(float64)
+    Accepts any float between 0 and 1 (exclusive) which defines the percentage of token validity when to schedule background refreshing
+
+WarningPercentageThreshold(float64)
+    Accepts any float between 0 (exclusive) and 1 (inclusive) which defines when the library starts logging warnings that tokens will, eventually expire.
+    This can happen if, for example, the background refresh is failing.
+    It should be higher than the refresh threshold.
+    
+UserCredentialsProvider(user.CredentialsProvider)
+    Accepts any user.CredentialsProvider instance that will provide user credentials for the password grant type
+    
+ClientCredentialsProvider(client.CredentialsProvider)
+    Accepts any client.CredentialsProvider instance that will provide client credentials for the OAuth calls
 
 .. _tokens: https://github.com/zalando-stups/tokens
 .. _python-tokens: https://github.com/zalando-stups/python-tokens
