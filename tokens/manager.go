@@ -8,6 +8,8 @@ import (
 	"path"
 )
 
+// The Manager takes care of background refreshing of access tokens which can be requested
+// at any time, in a thread safe way, for usage on your applications
 type Manager struct {
 	tokenRequests  []ManagementRequest
 	tokenRefresher *refresher
@@ -19,38 +21,12 @@ var (
 	ErrMissingURL = errors.New("Missing OAuth2 Token URL")
 	// ErrNoManagementRequests is returned whenever the manager is created without any management requests
 	ErrNoManagementRequests = errors.New("No token requests")
-	// ErrInvalidRefreshThreshold is returned if an invalid refresh threshold is used. It should be between 0.0 and 1.0
-	ErrInvalidRefreshThreshold = errors.New("Invalid refresh threshold")
-	// ErrInvalidWarningThreshold is returned if an invalid refresh threshold is used. It should be between 0.0 and 1.0
-	ErrInvalidWarningThreshold = errors.New("Invalid warning threshold")
 
 	// ErrTokenNotAvailable is returned when a named token is not available
 	ErrTokenNotAvailable = errors.New("no token available")
 	// ErrTokenExpired is returned when a named token is found but has expired
 	ErrTokenExpired = errors.New("token expired")
 )
-
-// RefreshPercentageThreshold returns a function that can set the refresh threshold on a tokensManager
-func RefreshPercentageThreshold(threshold float64) func(*Manager) error {
-	return func(t *Manager) error {
-		if threshold <= 0 || threshold >= 1 || threshold > t.tokenRefresher.warningPercentageThreshold {
-			return ErrInvalidRefreshThreshold
-		}
-		t.tokenRefresher.refreshPercentageThreshold = threshold
-		return nil
-	}
-}
-
-// WarningPercentageThreshold returns a function that can set the warning threshold on a tokensManager
-func WarningPercentageThreshold(threshold float64) func(*Manager) error {
-	return func(t *Manager) error {
-		if threshold <= 0 || threshold > 1 || threshold < t.tokenRefresher.refreshPercentageThreshold {
-			return ErrInvalidWarningThreshold
-		}
-		t.tokenRefresher.warningPercentageThreshold = threshold
-		return nil
-	}
-}
 
 // Manage is the main function of the token manager. It accepts management requests that will be retrieved from
 // the url parameter and, optionally, configured with a set of options.
@@ -93,6 +69,7 @@ func Manage(url string, requests []ManagementRequest, options ...func(*Manager) 
 	return &t, nil
 }
 
+// SetOption will set all the options passed as arguments in the Manager instance
 func (t *Manager) SetOption(options ...func(*Manager) error) error {
 	for _, opt := range options {
 		if err := opt(t); err != nil {
