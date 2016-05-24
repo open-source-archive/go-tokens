@@ -21,14 +21,14 @@ func TestWorkingJSONCredentials(t *testing.T) {
 	}
 }
 
-func TestInvalidCredentialsFile(t *testing.T) {
+func TestInvalidCredentialsFiles(t *testing.T) {
 	for _, test := range []struct {
-		fileName string
+		path string
 	}{
 		{"missing.json"},
 		{"testdata/broken.json"},
 	} {
-		cp := NewJSONFileClientCredentialsProvider(test.fileName)
+		cp := NewJSONFileClientCredentialsProvider(test.path)
 		_, err := cp.Get()
 		if err == nil {
 			t.Error("Expected an error for invalid credentials file")

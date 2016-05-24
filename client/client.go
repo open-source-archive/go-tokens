@@ -1,5 +1,5 @@
 /*
-Package user holds the interfaces for the Client credentials
+Package client holds the interfaces for the Client credentials
 */
 package client
 

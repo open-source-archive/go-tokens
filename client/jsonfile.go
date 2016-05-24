@@ -6,17 +6,19 @@ import (
 )
 
 type jsonFileClientCredentialsProvider struct {
-	fileName string
+	path string
 }
 
 // NewJSONFileClientCredentialsProvider returns a client.CredentialsProvider that reads both client id and
-// secret from a JSON file stored in the filesystem
-func NewJSONFileClientCredentialsProvider(fileName string) CredentialsProvider {
-	return &jsonFileClientCredentialsProvider{fileName}
+// secret from a JSON file stored in the specified filesystem path
+// The contents of such file should follow the following specifications:
+//		{"client_id":"foo","client_secret":"bar"}
+func NewJSONFileClientCredentialsProvider(path string) CredentialsProvider {
+	return &jsonFileClientCredentialsProvider{path}
 }
 
 func (cp *jsonFileClientCredentialsProvider) Get() (Credentials, error) {
-	buf, err := ioutil.ReadFile(cp.fileName)
+	buf, err := ioutil.ReadFile(cp.path)
 	if err != nil {
 		return nil, err
 	}
