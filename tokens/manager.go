@@ -43,7 +43,7 @@ func Manage(url string, requests []ManagementRequest, options ...func(*Manager) 
 	userCredentialsFile := path.Join(os.Getenv("CREDENTIALS_DIR"), "user.json")
 	clientCredentialsFile := path.Join(os.Getenv("CREDENTIALS_DIR"), "client.json")
 	th := newHolder()
-	t := Manager{
+	t := &Manager{
 		tokenRequests: requests,
 
 		tokenRefresher: newRefresher(
@@ -57,20 +57,24 @@ func Manage(url string, requests []ManagementRequest, options ...func(*Manager) 
 	}
 
 	if len(options) > 0 {
-		if err := t.SetOption(options...); err != nil {
+		if err := t.setOption(options...); err != nil {
+			t.Close()
 			return nil, err
 		}
 	}
 
-	if err := t.tokenRefresher.refreshTokens(requests); err != nil {
+	tks, err := t.tokenRefresher.refreshTokens(requests)
+	if err != nil {
+		t.Close()
 		return nil, err
 	}
 
-	return &t, nil
+	t.tokenRefresher.start(requests, tks)
+
+	return t, nil
 }
 
-// SetOption will set all the options passed as arguments in the Manager instance
-func (t *Manager) SetOption(options ...func(*Manager) error) error {
+func (t *Manager) setOption(options ...func(*Manager) error) error {
 	for _, opt := range options {
 		if err := opt(t); err != nil {
 			return err
@@ -91,4 +95,9 @@ func (t *Manager) Get(tokenID string) (*AccessToken, error) {
 	}
 
 	return at, nil
+}
+
+func (t *Manager) Close() {
+	t.tokenRefresher.stop()
+	t.tokenHolder.shutdown()
 }

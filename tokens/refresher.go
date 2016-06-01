@@ -7,7 +7,7 @@ import (
 	"github.com/zalando/go-tokens/client"
 	"github.com/zalando/go-tokens/httpclient"
 	"github.com/zalando/go-tokens/user"
-	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -49,24 +49,27 @@ func newRefresher(url string, ucp user.CredentialsProvider, ccp client.Credentia
 	return r
 }
 
-func (r *refresher) refreshTokens(requests []ManagementRequest) error {
+func (r *refresher) refreshTokens(requests []ManagementRequest) (map[string]*AccessToken, error) {
+	tks := make(map[string]*AccessToken)
 	for _, tokenRequest := range requests {
-		if err := r.doRefreshToken(tokenRequest); err != nil {
-			return err
+		if at, err := r.doRefreshToken(tokenRequest); err != nil {
+			return nil, err
+		} else {
+			tks[tokenRequest.id] = at
 		}
 	}
-	return nil
+	return tks, nil
 }
 
-func (r *refresher) doRefreshToken(tr ManagementRequest) error {
+func (r *refresher) doRefreshToken(tr ManagementRequest) (*AccessToken, error) {
 	uc, err := r.userCredentialsProvider.Get()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	cc, err := r.clientCredentialsProvider.Get()
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	c := make(url.Values)
@@ -79,7 +82,7 @@ func (r *refresher) doRefreshToken(tr ManagementRequest) error {
 
 	req, err := http.NewRequest("POST", r.url, strings.NewReader(c.Encode()))
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -88,28 +91,21 @@ func (r *refresher) doRefreshToken(tr ManagementRequest) error {
 
 	resp, err := r.httpClient.Do(req)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
-		return fmt.Errorf("Error getting token: %d - %v", resp.StatusCode, resp.Body)
+		return nil, fmt.Errorf("Error getting token: %d - %v", resp.StatusCode, resp.Body)
 	}
-
-	buf, err := ioutil.ReadAll(resp.Body)
 
 	at := new(AccessToken)
-	if err = json.Unmarshal(buf, at); err != nil {
-		return fmt.Errorf("Invalid token response: %v", err)
+	if err = json.NewDecoder(resp.Body).Decode(at); err != nil {
+		return nil, fmt.Errorf("Invalid token response: %v", err)
 	}
 
-	at.issuedAt = time.Now().Add(-1 * time.Second)
-	at.validUntil = at.issuedAt.Add(time.Duration(at.ExpiresIn) * time.Second)
-	delta := float64(at.ExpiresIn) * r.refreshPercentageThreshold
-	r.refreshScheduler.scheduleTokenRefresh(tr, time.Duration(int64(delta))*time.Second)
-
 	r.tokenHolder.set(tr.id, at)
-	return nil
+	return at, nil
 }
 
 func basicAuth(username, password string) string {
@@ -119,7 +115,25 @@ func basicAuth(username, password string) string {
 
 // This is the callback function the scheduler will run when the timer expires
 func (r *refresher) refreshToken(tr ManagementRequest) {
-	if err := r.doRefreshToken(tr); err != nil {
-		r.refreshScheduler.scheduleTokenRefresh(tr, retryDelay)
+	var d = retryDelay
+	if at, err := r.doRefreshToken(tr); err == nil {
+		d = at.RefreshIn(r.refreshPercentageThreshold)
 	}
+	if err := r.refreshScheduler.scheduleTokenRefresh(tr, d); err != nil {
+		log.Println(err)
+	}
+}
+
+func (r *refresher) start(requests []ManagementRequest, tks map[string]*AccessToken) {
+	for _, req := range requests {
+		at := tks[req.id]
+		delta := at.RefreshIn(r.refreshPercentageThreshold)
+		if err := r.refreshScheduler.scheduleTokenRefresh(req, delta); err != nil {
+			log.Println(err)
+		}
+	}
+}
+
+func (r *refresher) stop() {
+	r.refreshScheduler.stop()
 }

@@ -38,8 +38,8 @@ func newScheduler(callback refreshCallback) *scheduler {
 					r.err <- fmt.Errorf("Refresh of token %q was already scheduled. Skipping\n", r.mgmtReq.id)
 				} else {
 					m[r.mgmtReq.id] = runner(r.when, func() {
-						s.callback(r.mgmtReq)
 						delete(m, r.mgmtReq.id)
+						s.callback(r.mgmtReq)
 					})
 					r.err <- nil
 				}

@@ -11,16 +11,18 @@ Create a new token manager with the Manage() function
 
 This creates a new Manager which will obtain OAuth tokens from the http://oauth-endpoint
 
-You can set some options for the manager with the extra variadic argument, or later, after
-getting the Manager instance. The available options are:
+You can set some options for the manager with the extra variadic argument. The available options are:
 
 	RefreshPercentageThreshold(float64)
 	WarningPercentageThreshold(float64)
+	UserCredentialsProvider(user.CredentialsProvider)
+    ClientCredentialsProvider(client.CredentialsProvider)
 
 The warning threshold should be higher than the refresh threshold. The default values for
 these options are 60% (0.60) for the refresh threshold and 80% (0.80) for the warning threshold.
+The default credentials providers, for both user and client, read those credentials from JSON files
 
-They can be used immediately when the token manager is created
+They can be used when the token manager is created
 
 	tokenManager := Manage(
 		"http://oauth-endpoint",
@@ -43,6 +45,5 @@ The call can fail with 2 specific errors:
 	ErrTokenNotAvailable
 	ErrTokenExpired
 
-Which are self explanatory
 */
 package tokens

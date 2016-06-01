@@ -1,6 +1,6 @@
 package user
 
-type staticUserCredentialsProvider struct {
+type static struct {
 	username string
 	password string
 }
@@ -8,17 +8,17 @@ type staticUserCredentialsProvider struct {
 // NewStaticUserCredentialsProvider returns a user.CredentialsProvider that returns the username and password
 // used in the arguments u and p, respectively
 func NewStaticUserCredentialsProvider(u string, p string) CredentialsProvider {
-	return &staticUserCredentialsProvider{username: u, password: p}
+	return &static{username: u, password: p}
 }
 
-func (cp *staticUserCredentialsProvider) Get() (Credentials, error) {
+func (cp *static) Get() (Credentials, error) {
 	return cp, nil
 }
 
-func (cp *staticUserCredentialsProvider) Username() string {
+func (cp *static) Username() string {
 	return cp.username
 }
 
-func (cp *staticUserCredentialsProvider) Password() string {
+func (cp *static) Password() string {
 	return cp.password
 }
