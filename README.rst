@@ -56,16 +56,16 @@ User Guide
     url := "https://example.com/oauth2/access_token"
 
     // You can manage multiple tokens with different scopes
-	reqs := []tokens.ManagementRequest{
-		tokens.NewPasswordRequest("test1", "foo.read"),
-		tokens.NewPasswordRequest("test2", "user.email", "user.name"),
-	}
+    reqs := []tokens.ManagementRequest{
+        tokens.NewPasswordRequest("test1", "foo.read"),
+        tokens.NewPasswordRequest("test2", "user.email", "user.name"),
+    }
 
-	// Manager creation tries to obtain all tokens synchronously initially
-	tokensManager, err := tokens.Manage(url, reqs)
-	if err != nil {
-		log.Fatal(err)
-	}
+    // Manager creation tries to obtain all tokens synchronously initially
+    tokensManager, err := tokens.Manage(url, reqs)
+    if err != nil {
+        log.Fatal(err)
+    }
 
     if test1, err := tokensManager.Get("test1"); err == nil {
         // Do something with the access token "test1"
