@@ -45,9 +45,7 @@ func TestManager(t *testing.T) {
 func testServer(status int) (*httptest.Server, string) {
 	handler := func(w http.ResponseWriter, req *http.Request) {
 		w.WriteHeader(status)
-		//if status == http.StatusOK {
 		fmt.Fprint(w, testToken)
-		//}
 	}
 
 	server := httptest.NewServer(http.HandlerFunc(handler))

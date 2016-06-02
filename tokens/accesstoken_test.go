@@ -1,6 +1,10 @@
 package tokens
 
 import (
+	"encoding/json"
+	"github.com/kr/pretty"
+	"reflect"
+	"strings"
 	"testing"
 	"time"
 )
@@ -21,21 +25,42 @@ func TestAccessToken(t *testing.T) {
 	}
 }
 
+// 2009-11-10 23:00:00 UTC
 func TestStringer(t *testing.T) {
 	for _, test := range []struct {
 		id         string
-		expiration int
+		validUntil time.Time
 		want       string
 	}{
-		{"foo", 0, "foo expires in 0 second(s)"},
-		{"bar", 0, "bar expires in 0 second(s)"},
-		{"baz", 42, "baz expires in 42 second(s)"},
+		{"foo", time.Date(2009, 11, 10, 23, 0, 0, 0, time.UTC), "f...o valid until 2009-11-10 23:00:00 +0000 UTC"},
+		{"bar", time.Date(2009, 11, 10, 23, 42, 0, 0, time.UTC), "b...r valid until 2009-11-10 23:42:00 +0000 UTC"},
+		{"baz", time.Date(2009, 11, 10, 23, 0, 42, 0, time.UTC), "b...z valid until 2009-11-10 23:00:42 +0000 UTC"},
 	} {
-		at := &AccessToken{Token: test.id, ExpiresIn: test.expiration}
+		at := &AccessToken{Token: test.id, validUntil: test.validUntil}
 		got := at.String()
 		if got != test.want {
 			t.Errorf("Unexpected result. Wanted %q, got %q\n", test.want, got)
 		}
 	}
+}
 
+func TestUnmarshalling(t *testing.T) {
+	for _, test := range []struct {
+		payload   string
+		want      *AccessToken
+		wantError error
+	}{
+		{"%%", nil, nil},
+	} {
+		var got *AccessToken
+		err := json.NewDecoder(strings.NewReader(test.payload)).Decode(got)
+		pretty.Println(err, got)
+		if test.wantError != nil && test.wantError != err {
+			t.Errorf("Unexpected error condition. Wanted %v but got %v\n", test.wantError, err)
+		} else {
+			if !reflect.DeepEqual(test.want, got) {
+				t.Errorf("Unexpected access token. Wanted %v but got %v\n", test.want, got)
+			}
+		}
+	}
 }

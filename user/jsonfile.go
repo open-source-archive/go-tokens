@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 )
 
-type jsonFileUserCredentialsProvider struct {
+type provider struct {
 	path string
 }
 
@@ -14,16 +14,16 @@ type jsonFileUserCredentialsProvider struct {
 // The contents of such file should follow the following specifications:
 //		{"application_username":"foo","application_password":"bar"}
 func NewJSONFileUserCredentialsProvider(path string) CredentialsProvider {
-	return &jsonFileUserCredentialsProvider{path}
+	return &provider{path}
 }
 
-func (cp *jsonFileUserCredentialsProvider) Get() (Credentials, error) {
+func (cp *provider) Get() (Credentials, error) {
 	buf, err := ioutil.ReadFile(cp.path)
 	if err != nil {
 		return nil, err
 	}
 
-	var credentials jsonFileUserCredentials
+	var credentials credentials
 	err = json.Unmarshal(buf, &credentials)
 	if err != nil {
 		return nil, err
@@ -31,15 +31,15 @@ func (cp *jsonFileUserCredentialsProvider) Get() (Credentials, error) {
 	return credentials, nil
 }
 
-type jsonFileUserCredentials struct {
+type credentials struct {
 	User string `json:"application_username"`
 	Pass string `json:"application_password"`
 }
 
-func (uc jsonFileUserCredentials) Username() string {
+func (uc credentials) Username() string {
 	return uc.User
 }
 
-func (uc jsonFileUserCredentials) Password() string {
+func (uc credentials) Password() string {
 	return uc.Pass
 }

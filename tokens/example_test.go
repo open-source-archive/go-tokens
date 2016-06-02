@@ -37,20 +37,13 @@ func ExampleManage() {
 		log.Fatal(err)
 	}
 
-	at, err := tokens.Get("test1")
+	_, err = tokens.Get("test1")
 	if err != nil {
 		log.Println(err)
-	} else {
-		fmt.Println(at)
 	}
 
-	at, err = tokens.Get("test2")
+	_, err = tokens.Get("test2")
 	if err != nil {
 		log.Println(err)
-	} else {
-		fmt.Println(at)
 	}
-	// Output:
-	// test1 expires in 4 second(s)
-	// test2 expires in 8 second(s)
 }

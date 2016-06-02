@@ -47,7 +47,6 @@ func UserCredentialsProvider(ucp user.CredentialsProvider) func(*Manager) error 
 		if ucp == nil {
 			return ErrInvalidUserCredentialsProvider
 		}
-		// TODO: reset scheduler, switch provider in a thread safe way, resume scheduler
 		t.tokenRefresher.userCredentialsProvider = ucp
 		return nil
 	}
@@ -59,7 +58,6 @@ func ClientCredentialsProvider(ccp client.CredentialsProvider) func(*Manager) er
 		if ccp == nil {
 			return ErrInvalidUserCredentialsProvider
 		}
-		// TODO: reset scheduler, switch provider in a thread safe way, resume scheduler
 		t.tokenRefresher.clientCredentialsProvider = ccp
 		return nil
 	}

@@ -27,14 +27,18 @@ func TestRefresher(t *testing.T) {
 		th,
 	)
 	tr := NewPasswordRequest("test", "uid", "team")
-	err := r.doRefreshToken(tr)
+	at, err := r.doRefreshToken(tr)
 	if err != nil {
 		t.Error(err)
 	}
 
-	at := th.get("test")
-	if at == nil {
+	test := th.get("test")
+	if test == nil {
 		t.Fatal("Failed to get token 'test' from the token holder")
+	}
+
+	if at != test {
+		t.Fatalf("Unpextected token from get(). Wanted %v, got %v\n", at, test)
 	}
 
 	if at.Token != "header.claims.sig" {
@@ -84,7 +88,7 @@ func TestRefresherFailure(t *testing.T) {
 	} {
 		r := newRefresher(test.u, test.ucp, test.ccp, th)
 
-		err := r.refreshTokens([]ManagementRequest{NewPasswordRequest("test", "uid", "team")})
+		_, err := r.refreshTokens([]ManagementRequest{NewPasswordRequest("test", "uid", "team")})
 		if err == nil {
 			t.Error("Refresh should have failed")
 		}

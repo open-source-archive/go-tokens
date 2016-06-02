@@ -1,6 +1,6 @@
 package client
 
-type staticClientCredentialsProvider struct {
+type static struct {
 	id     string
 	secret string
 }
@@ -8,17 +8,17 @@ type staticClientCredentialsProvider struct {
 // NewStaticClientCredentialsProvider returns a client.CredentialsProvider that returns the id and secret
 // used in the arguments clientId and clientSecret, respectively
 func NewStaticClientCredentialsProvider(clientID string, clientSecret string) CredentialsProvider {
-	return &staticClientCredentialsProvider{id: clientID, secret: clientSecret}
+	return &static{id: clientID, secret: clientSecret}
 }
 
-func (cp *staticClientCredentialsProvider) Get() (Credentials, error) {
+func (cp *static) Get() (Credentials, error) {
 	return cp, nil
 }
 
-func (cp *staticClientCredentialsProvider) Id() string {
+func (cp *static) Id() string {
 	return cp.id
 }
 
-func (cp *staticClientCredentialsProvider) Secret() string {
+func (cp *static) Secret() string {
 	return cp.secret
 }

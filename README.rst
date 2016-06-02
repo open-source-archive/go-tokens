@@ -15,7 +15,7 @@ Go Tokens Library
 
 This is a library very similar to `tokens`_ and `python-tokens`_.
 
-In a nutshell, you provide the OAuth2 token endpoint and which tokens and scopes to have managed.
+In a nutshell, you provide the OAuth2 token endpoint and which tokens and scopes to be managed.
  
 The library can use any custom credentials provider and it will make sure that the managed tokens are always
 valid by refreshing them before they expire.
@@ -48,36 +48,34 @@ interface to implement for any custom type that is able to provide ``client.Cred
 
 For a simple example, check the ``client/static.go`` file.
 
-Users Guide
------------
+User Guide
+----------
 
 .. code-block:: go
 
     url := "https://example.com/oauth2/access_token"
 
     // You can manage multiple tokens with different scopes
-	reqs := []tokens.ManagementRequest{
-		tokens.NewPasswordRequest("test1", "foo.read"),
-		tokens.NewPasswordRequest("test2", "user.email", "user.name"),
-	}
+    reqs := []tokens.ManagementRequest{
+        tokens.NewPasswordRequest("test1", "foo.read"),
+        tokens.NewPasswordRequest("test2", "user.email", "user.name"),
+    }
 
-	// Manager creation tries to obtain all tokens synchronously initially
-	tokensManager, err := tokens.Manage(url, reqs)
-	if err != nil {
-		log.Fatal(err)
-	}
+    // Manager creation tries to obtain all tokens synchronously initially
+    tokensManager, err := tokens.Manage(url, reqs)
+    if err != nil {
+        log.Fatal(err)
+    }
 
-	// You can use any of the above tokens for as long as you want
-	for {
-		accessToken, err := tokensManager.Get("test1") // or "test2"
-		if err != nil {
-			log.Println(err)
-		} else {
-			// Do something with accessToken
-		}
-	}
+    if test1, err := tokensManager.Get("test1"); err == nil {
+        // Do something with the access token "test1"
+    }
 
-The previous example would create a token manager using the JSON files credentials providers and a refresh threshold of 60% of the token validity time.
+    if test2, err := tokensManager.Get("test2"); err == nil {
+        // Do something with the access token "test2"
+    }
+
+This example would create a token manager using the JSON files credentials providers and a refresh threshold of 60% of the token validity time.
 
 Manager Options
 ~~~~~~~~~~~~~~~
