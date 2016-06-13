@@ -16,12 +16,12 @@ Go Tokens Library
 
 **go-tokens** is a library that refreshes your OAuth tokens before they expire. Simply provide go-tokens with your OAuth2 token endpoint and tokens and scopes that you want it to manage, and it will ensure that your managed tokens remain valid. It can use any custom credentials provider, and you can use your own credential providers.
 
-**[[questions/context--answer each question in a few words, a sentence each at most. :)
+**[[questions/context--answer each question in a few words, a sentence each at most. :)**
 
-- I did a quick Google search with the tag and got go-tokens first. That's good--it suggests that no other similar project does the same thing. Do you know one way or the other? If you looked and didn't find anything similar, I'd add that here.
-- Can you give an example or two of why/in what sort of scenario someone would use this? How will this project make somebody's/a team's life better?
-- Who would be likely to use this tool? i.e. who's the target audience?
--- How did this project come about?/why did you make it?]]**
+**- I did a quick Google search with the tag and got go-tokens first. That's good--it suggests that no other similar project does the same thing. Do you know one way or the other? If you looked and didn't find anything similar, I'd add that here.**
+**- Can you give an example or two of why/in what sort of scenario someone would use this? How will this project make somebody's/a team's life better?**
+**- Who would be likely to use this tool? i.e. who's the target audience?**
+**- How did this project come about?/why did you make it?]]**
 
 [[**Usage instructions: Getting it, installing it, running it, configuring it, etc. Any troubleshooting tips based on easy-to-make mistakes in getting it running will also help. Keep it essential but brief. ]**
 
