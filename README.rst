@@ -13,22 +13,25 @@ Go Tokens Library
 .. image:: https://godoc.org/github.com/zalando/go-tokens?status.svg
     :target: https://godoc.org/github.com/zalando/go-tokens
 
-This is a library very similar to `tokens`_ and `python-tokens`_.
 
-In a nutshell, you provide the OAuth2 token endpoint and which tokens and scopes to be managed.
- 
-The library can use any custom credentials provider and it will make sure that the managed tokens are always
-valid by refreshing them before they expire.
+**go-tokens** is a library that refreshes your OAuth tokens before they expire. In a nutshell, you provide go-tokens with your OAuth2 token endpoint, tokens and scopes that you want it to manage, and it ensures that your managed tokens remain valid. It can use any custom credentials provider.
+
+[[**questions/context--answer each question in a few words, a sentence each at most. :)
+
+- I did a quick Google search with the tag and got go-tokens first. That's good--it suggests that no other similar project does the same thing. Do you know one way or the other? If you looked and didn't find anything similar, I'd say so here.
+- Can you give an example or two of why someone would use this? How will this project make somebody's life better?
+- Who would be likely to use this tool? i.e. who's the target audience?
+-- How did this project come about? ]]**
+
+[[**Usage instructions: Getting it, installing it, running it, configuring it, etc. Any troubleshooting tips based on easy-to-make mistakes in getting it running will also help. Keep it essential but brief. **]
 
 Credentials Provider
 --------------------
 
-The library currently contains implementations of the ``user.CredentialsProvider`` and the ``client.CredentialsProvider``
-that you can use out of the box. The simplest providers just returns some static values used on creation. The other
-providers fetch credentials from JSON files (user.json and client.json) from a folder defined in the
-``CREDENTIALS_DIR`` environment variable.
+go-tokens currently contains implementations of the ``user.CredentialsProvider`` and the ``client.CredentialsProvider``
+that you can use out of the box. The simplest providers [[**such as?**]] just return some static values used at the time of creation. More complex providers [[**such as?**]] fetch credentials from JSON files (user.json and client.json) from a folder defined in the ``CREDENTIALS_DIR`` environment variable.
 
-You can easily use your own credential providers.
+You can easily use your own credential providers. [[**show me how?**]]
 
 User Credentials
 ~~~~~~~~~~~~~~~~
@@ -37,7 +40,7 @@ User credentials are, very simply, a username and a password. Any type that impl
 be able to provide them. The ``user.CredentialsProvider`` is the interface to implement for any custom type that is
 able to provide ``user.Credentials``.
 
-For a simple example, check the ``user/static.go`` file.
+For a simple example, check the `user/static.go`_ file.
 
 Client Credentials
 ~~~~~~~~~~~~~~~~~~
@@ -96,5 +99,8 @@ UserCredentialsProvider(user.CredentialsProvider)
 ClientCredentialsProvider(client.CredentialsProvider)
     Accepts any client.CredentialsProvider instance that will provide client credentials for the OAuth calls
 
+This is a library very similar to `tokens`_ and `python-tokens`_.
+
 .. _tokens: https://github.com/zalando-stups/tokens
 .. _python-tokens: https://github.com/zalando-stups/python-tokens
+.. _user/static.go: https://github.com/zalando/go-tokens/blob/master/user/static.go
