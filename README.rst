@@ -21,7 +21,7 @@ Go Tokens Library
 - I did a quick Google search with the tag and got go-tokens first. That's good--it suggests that no other similar project does the same thing. Do you know one way or the other? If you looked and didn't find anything similar, I'd add that here.
 - Can you give an example or two of why/in what sort of scenario someone would use this? How will this project make somebody's/a team's life better?
 - Who would be likely to use this tool? i.e. who's the target audience?
-- How did this project come about?/why did you make it?]]
+- How did this project come about?/why did you make it?
 
 **Add Usage instructions: Getting it, installing it, running it, configuring it, etc. Any troubleshooting tips based on easy-to-make mistakes in getting it running will also help. Keep it essential but brief.**
 
