@@ -47,7 +47,7 @@ For a simple example, check the `client/static.go`_ file.
 
 User Guide
 ----------
-[[**I'd add a few words of context/intro-type language here, and maybe pull out the comment about the Manager + manager creation to explain how it works. Or, if it makes sense, discuss the manager/manager creation above, because of the next section on manager options. **] 
+**I'd add a few words of context/intro-type language here, and maybe pull out the comment about the Manager + manager creation to explain how it works. Or, if it makes sense, discuss the manager/manager creation above, because of the next section on manager options.**
 
 .. code-block:: go
 
