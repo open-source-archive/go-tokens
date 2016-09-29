@@ -1,17 +1,19 @@
 package tokens
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/zalando/go-tokens/client"
-	"github.com/zalando/go-tokens/httpclient"
-	"github.com/zalando/go-tokens/user"
 	"log"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/zalando/go-tokens/client"
+	"github.com/zalando/go-tokens/httpclient"
+	"github.com/zalando/go-tokens/user"
 )
 
 type refresher struct {
@@ -96,7 +98,9 @@ func (r *refresher) doRefreshToken(tr ManagementRequest) (*AccessToken, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
-		return nil, fmt.Errorf("Error getting token: %d - %v", resp.StatusCode, resp.Body)
+		buf := new(bytes.Buffer)
+		buf.ReadFrom(resp.Body)
+		return nil, fmt.Errorf("Error getting token: %d - %s", resp.StatusCode, buf.String())
 	}
 
 	at := new(AccessToken)
