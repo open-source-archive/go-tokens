@@ -34,6 +34,7 @@ const (
 	defaultRefreshPercentageThreshold = 0.6
 	defaultWarningPercentageThreshold = 0.8
 	retryDelay                        = 10 * time.Second
+	maxErrorLengthLimit               = 128
 )
 
 func newRefresher(url string, ucp user.CredentialsProvider, ccp client.CredentialsProvider, h *holder) *refresher {
@@ -100,7 +101,7 @@ func (r *refresher) doRefreshToken(tr ManagementRequest) (*AccessToken, error) {
 
 	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
 		buf := new(bytes.Buffer)
-		buf.ReadFrom(&io.LimitedReader{R: resp.Body, N: 128})
+		buf.ReadFrom(io.LimitReader(resp.Body, maxErrorLengthLimit))
 		return nil, fmt.Errorf("Error getting token: %d - %s", resp.StatusCode, buf.String())
 	}
 
