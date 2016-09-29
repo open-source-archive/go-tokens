@@ -1,17 +1,20 @@
 package tokens
 
 import (
+	"bytes"
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"github.com/zalando/go-tokens/client"
-	"github.com/zalando/go-tokens/httpclient"
-	"github.com/zalando/go-tokens/user"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/zalando/go-tokens/client"
+	"github.com/zalando/go-tokens/httpclient"
+	"github.com/zalando/go-tokens/user"
 )
 
 type refresher struct {
@@ -31,6 +34,7 @@ const (
 	defaultRefreshPercentageThreshold = 0.6
 	defaultWarningPercentageThreshold = 0.8
 	retryDelay                        = 10 * time.Second
+	maxErrorLengthLimit               = 128
 )
 
 func newRefresher(url string, ucp user.CredentialsProvider, ccp client.CredentialsProvider, h *holder) *refresher {
@@ -96,7 +100,9 @@ func (r *refresher) doRefreshToken(tr ManagementRequest) (*AccessToken, error) {
 	defer resp.Body.Close()
 
 	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
-		return nil, fmt.Errorf("Error getting token: %d - %v", resp.StatusCode, resp.Body)
+		buf := new(bytes.Buffer)
+		buf.ReadFrom(io.LimitReader(resp.Body, maxErrorLengthLimit))
+		return nil, fmt.Errorf("Error getting token: %d - %s", resp.StatusCode, buf.String())
 	}
 
 	at := new(AccessToken)
