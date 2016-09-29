@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"net/url"
@@ -99,7 +100,7 @@ func (r *refresher) doRefreshToken(tr ManagementRequest) (*AccessToken, error) {
 
 	if resp.StatusCode < http.StatusOK || resp.StatusCode >= http.StatusMultipleChoices {
 		buf := new(bytes.Buffer)
-		buf.ReadFrom(resp.Body)
+		buf.ReadFrom(&io.LimitedReader{R: resp.Body, N: 128})
 		return nil, fmt.Errorf("Error getting token: %d - %s", resp.StatusCode, buf.String())
 	}
 
