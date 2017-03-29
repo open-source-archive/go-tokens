@@ -4,14 +4,14 @@ Go Tokens Library
 .. image:: https://travis-ci.org/zalando-incubator/go-tokens.svg?branch=master
     :target: https://travis-ci.org/zalando-incubator/go-tokens
 
-.. image:: https://codecov.io/github/zalando/go-tokens/coverage.svg?branch=master
-    :target: https://codecov.io/github/zalando/go-tokens?branch=master
+.. image:: https://codecov.io/github/zalando-incubator/go-tokens/coverage.svg?branch=master
+    :target: https://codecov.io/github/zalando-incubator/go-tokens?branch=master
 
-.. image:: https://goreportcard.com/badge/github.com/zalando/go-tokens
-    :target: https://goreportcard.com/report/github.com/zalando/go-tokens
+.. image:: https://goreportcard.com/badge/github.com/zalando-incubator/go-tokens
+    :target: https://goreportcard.com/report/github.com/zalando-incubator/go-tokens
 
-.. image:: https://godoc.org/github.com/zalando/go-tokens?status.svg
-    :target: https://godoc.org/github.com/zalando/go-tokens
+.. image:: https://godoc.org/github.com/zalando-incubator/go-tokens?status.svg
+    :target: https://godoc.org/github.com-incubator/zalando/go-tokens
 
 
 **go-tokens** is a library that refreshes your OAuth tokens before they expire. Simply provide go-tokens with your OAuth2 token endpoint and tokens and scopes that you want it to manage, and it will ensure that your managed tokens remain valid. It can use any custom credentials provider, and you can use your own credential providers.
