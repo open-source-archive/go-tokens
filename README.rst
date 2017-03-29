@@ -1,8 +1,8 @@
 Go Tokens Library
 =================
 
-.. image:: https://travis-ci.org/zalando/go-tokens.svg?branch=master
-    :target: https://travis-ci.org/zalando/go-tokens
+.. image:: https://travis-ci.org/zalando-incubator/go-tokens.svg?branch=master
+    :target: https://travis-ci.org/zalando-incubator/go-tokens
 
 .. image:: https://codecov.io/github/zalando/go-tokens/coverage.svg?branch=master
     :target: https://codecov.io/github/zalando/go-tokens?branch=master
